@@ -66,8 +66,9 @@ class App extends React.Component {
   handleParkCar() {
     console.log("trying dict", validity[this.state.validityOption]);
     let expiry = Date.now() + validity[this.state.validityOption];
+    let trimmedCarplate = this.state.carplate.replace(/\s+/g, '');
 
-    this.db.ref(`/${this.state.carpark.toUpperCase()}/${this.state.carplate.toUpperCase()}`).set({
+    this.db.ref(`/${this.state.carpark.toUpperCase()}/${trimmedCarplate.toUpperCase()}`).set({
       validTill: expiry
     })
     .then(() => {
