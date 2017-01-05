@@ -21539,6 +21539,7 @@
 	      isConnected: false,
 	      carpark: "",
 	      carplate: "",
+	      lotNo: "",
 	      validityOption: "expire15",
 	      parking: ""
 	    };
@@ -21598,9 +21599,11 @@
 	      console.log("trying dict", validity[this.state.validityOption]);
 	      var expiry = Date.now() + validity[this.state.validityOption];
 	      var trimmedCarplate = this.state.carplate.replace(/\s+/g, '');
+	      var lotNo = parseInt(this.state.lotNo);
 
 	      this.db.ref('/' + this.state.carpark.toUpperCase() + '/' + trimmedCarplate.toUpperCase()).set({
-	        validTill: expiry
+	        validTill: expiry,
+	        lotNo: lotNo
 	      }).then(function () {
 	        _this3.setState({ parking: "Completed" });
 	      });
@@ -21620,17 +21623,20 @@
 	          'Carpark:',
 	          _react2.default.createElement('input', { className: 'form-control', type: 'text', onChange: function onChange(carpark) {
 	              _this4.setState({ carpark: carpark.target.value.toUpperCase() });
-	              console.log(carpark.target.value.toUpperCase());
 	            } }),
 	          _react2.default.createElement('br', null),
-	          'Park this car:',
-	          _react2.default.createElement('input', { className: 'form-control', ref: 'carplateInput', type: 'text', onChange: function onChange(carplate) {
+	          'Lot No.:',
+	          _react2.default.createElement('input', { className: 'form-control', type: 'number', onChange: function onChange(lotNo) {
+	              _this4.setState({ lotNo: lotNo.target.value });
+	            } }),
+	          _react2.default.createElement('br', null),
+	          'Carplate:',
+	          _react2.default.createElement('input', { className: 'form-control', type: 'text', onChange: function onChange(carplate) {
 	              _this4.setState({ carplate: carplate.target.value });
-	              console.log(carplate.target.value);
 	            } }),
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.handleSubmit.bind(this), type: 'button', disabled: this.state.carplate === "" || this.state.carpark === "",
+	            { onClick: this.handleSubmit.bind(this), type: 'button', disabled: this.state.carplate === "" || this.state.carpark === "" || this.state.lotNo === "",
 	              className: 'btn btn-primary' },
 	            'Park!'
 	          ),
