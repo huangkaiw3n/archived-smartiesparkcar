@@ -22,6 +22,7 @@ class App extends React.Component {
       isConnected: false,
       carpark: "",
       carplate: "",
+      lotNo: "",
       validityOption: "expire15",
       parking: ""
     }
@@ -67,9 +68,11 @@ class App extends React.Component {
     console.log("trying dict", validity[this.state.validityOption]);
     let expiry = Date.now() + validity[this.state.validityOption];
     let trimmedCarplate = this.state.carplate.replace(/\s+/g, '');
+    let lotNo = parseInt(this.state.lotNo);
 
     this.db.ref(`/${this.state.carpark.toUpperCase()}/${trimmedCarplate.toUpperCase()}`).set({
-      validTill: expiry
+      validTill: expiry,
+      lotNo
     })
     .then(() => {
       this.setState({parking: "Completed"})
@@ -84,15 +87,18 @@ class App extends React.Component {
             Carpark:
             <input className="form-control" type="text" onChange={carpark => {
               this.setState({carpark: carpark.target.value.toUpperCase()});
-              console.log(carpark.target.value.toUpperCase());
             }} />
           <br/>
-            Park this car:
-            <input className="form-control" ref="carplateInput" type="text" onChange={carplate => {
-              this.setState({carplate: carplate.target.value});
-              console.log(carplate.target.value);
+            Lot No.:
+            <input className="form-control" type="number" onChange={lotNo => {
+              this.setState({lotNo: lotNo.target.value});
             }} />
-            <button onClick={this.handleSubmit.bind(this)} type="button" disabled={this.state.carplate === "" || this.state.carpark === ""}
+          <br/>
+            Carplate:
+            <input className="form-control" type="text" onChange={carplate => {
+              this.setState({carplate: carplate.target.value});
+            }} />
+            <button onClick={this.handleSubmit.bind(this)} type="button" disabled={this.state.carplate === "" || this.state.carpark === "" || this.state.lotNo === ""}
               className="btn btn-primary">
               Park!
             </button>
